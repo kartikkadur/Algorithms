@@ -76,11 +76,42 @@ func HasPath(graph [][]int, src int, dst int) bool {
 	return false
 }
 
+func isValied(graph [][]int, row int, col int, visited [][]bool) bool {
+	// checks if the index is valied and if the node is not visited.
+	// Returns true if both the conditions pass else returns false.
+	return (row >= 0) && (row < len(graph)) && (col >=0 ) && (col < len(graph)) && (graph[row][col] == 1) && !visited[row][col]
+}
+
+// perform DFS by considering each cell in a 2d grid as a node
+func DepthFirstSearchGrid(graph [][]int, row int, col int, visited [][]bool) {
+	// check if the cells adjacent to (row, col) is connected
+	adjRows := []int {-1, -1, -1, 0, 0, 1, 1, 1}
+	adjCols := []int {-1, 0, 1, -1, 1, -1, 0, 1}
+	// set current row and col as visited
+	visited[row][col] = true
+	// loop through all the adjacent cell to recursively find connected components
+	for k:=0; k<8; k++ {
+		if isValied(graph, row + adjRows[k], col + adjCols[k], visited) {
+			DepthFirstSearchGrid(graph, row + adjRows[k], col + adjCols[k], visited) // perform recursion
+		}
+	}
+}
+
 // count connected componenets or islands
 func FindConnectedComponents(graph [][]int) int {
-	visited := make([][]bool, len(graph), len(graph))
+	visited := make([][]bool, len(graph))
+	for i := range visited {
+		visited[i] = make([]bool, len(graph))
+	}
 	count := 0
 	for i:=0; i<len(graph); i++ {
+		for j:=0; j<len(graph[i]); j++ {
+			// perform DFS traversal and mark visited nodes
+			if graph[i][j] == 1 && !visited[i][j] {
+				count++
+				DepthFirstSearchGrid(graph, i, j, visited)
+			}
+		}
 	}
 	return count
 }
