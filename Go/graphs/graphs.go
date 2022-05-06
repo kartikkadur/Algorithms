@@ -83,35 +83,50 @@ func isValied(graph [][]int, row int, col int, visited [][]bool) bool {
 }
 
 // perform DFS by considering each cell in a 2d grid as a node
-func DepthFirstSearchGrid(graph [][]int, row int, col int, visited [][]bool) {
+func DepthFirstSearchGrid(graph [][]int, row int, col int, visited [][]bool) int {
+	if visited[row][col] {
+		return 0
+	}
 	// check if the cells adjacent to (row, col) is connected
 	adjRows := []int {-1, -1, -1, 0, 0, 1, 1, 1}
 	adjCols := []int {-1, 0, 1, -1, 1, -1, 0, 1}
+	// initialize the size of the current component
+	var size int = 1
 	// set current row and col as visited
 	visited[row][col] = true
 	// loop through all the adjacent cell to recursively find connected components
 	for k:=0; k<8; k++ {
 		if isValied(graph, row + adjRows[k], col + adjCols[k], visited) {
-			DepthFirstSearchGrid(graph, row + adjRows[k], col + adjCols[k], visited) // perform recursion
+			size = 1 + DepthFirstSearchGrid(graph, row + adjRows[k], col + adjCols[k], visited) // perform recursion
 		}
 	}
+	return size
 }
 
 // count connected componenets or islands
-func FindConnectedComponents(graph [][]int) int {
+func FindConnectedComponents(graph [][]int) (int, int) {
 	visited := make([][]bool, len(graph))
 	for i := range visited {
 		visited[i] = make([]bool, len(graph))
 	}
 	count := 0
+	largest_size := 0
 	for i:=0; i<len(graph); i++ {
 		for j:=0; j<len(graph[i]); j++ {
 			// perform DFS traversal and mark visited nodes
 			if graph[i][j] == 1 && !visited[i][j] {
 				count++
-				DepthFirstSearchGrid(graph, i, j, visited)
+				size := DepthFirstSearchGrid(graph, i, j, visited)
+				if size > largest_size {
+					largest_size = size
+				}
 			}
 		}
 	}
-	return count
+	return count, largest_size
+}
+
+// Shortest path between a source and destination
+func ShortestPath(graph [][]int, src int, dst int) {
+	
 }

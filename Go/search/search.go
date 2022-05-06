@@ -1,7 +1,7 @@
 package search
 
-func binarySearchIterative(arr []int, target int) int{
-	var low, high int = 0, len(arr)-1
+// binary search iterative approach
+func binarySearchIterative(arr []int, target int, low int, high int) int{
 	for low <= high {
 		mid := (low + high) / 2
 		if target >= arr[mid] {
@@ -17,6 +17,7 @@ func binarySearchIterative(arr []int, target int) int{
 	}
 }
 
+// binary search recursive approach
 func binarySearchRecursive(arr []int, target int, low int, high int) int {
 	mid := low + (high - low) / 2
 	if low >= high {
@@ -35,7 +36,12 @@ func binarySearchRecursive(arr []int, target int, low int, high int) int {
 	}
 }
 
-func Search(arr []int, target int) int {
-	//low, high := 0, len(arr)-1
-	return binarySearchIterative(arr, target)
+// An exposed function to call search algorithm
+func Search(arr []int, target int, use_recursion bool = false) int {
+	low, high := 0, len(arr)-1
+	if use_recursion {
+		return binarySearchRecursive(arr, target, low, high)
+	} else {
+		return binarySearchIterative(arr, target, low, high)
+	}
 }

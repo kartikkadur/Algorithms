@@ -1,5 +1,8 @@
 package sort
 
+/* Merge Sort algorithm:
+	time complexity : O(nlogn);
+	space complexity : O(n) */
 func mergeSort(nums []int) []int {
 	if len(nums) < 2 {
 		return nums
@@ -8,6 +11,7 @@ func mergeSort(nums []int) []int {
 	return merge(mergeSort(nums[:mid]), mergeSort(nums[mid:]))
 }
 
+// function that performs merging of two sorted arrays
 func merge(left []int, right []int) []int {
 	var i, j int = 0, 0
 	var size int = len(left) + len(right)
@@ -32,6 +36,22 @@ func merge(left []int, right []int) []int {
 	return array
 }
 
+/* Quick Sort algorithm :
+	time complexity:
+		best case: O(nlogn)
+		worst case: O(n^2)
+		avg case : O(nlogn)
+	Space complexity: O(1)
+*/
+func quickSort(arr []int, low int, high int) {
+	if low < high {
+		p := partition(arr, low, high)
+		quickSort(arr, low, p-1)
+		quickSort(arr, p+1, high)
+	}
+}
+
+//a function to partition the array based on the pivoted element
 func partition(arr []int, low, high int) int {
 	pivot := (low + high) / 2
 	i := low - 1
@@ -44,14 +64,6 @@ func partition(arr []int, low, high int) int {
 	}
 	arr[i+1], arr[high] = arr[high], arr[i+1]
 	return i+1
-}
-
-func quickSort(arr []int, low int, high int) {
-	if low < high {
-		p := partition(arr, low, high)
-		quickSort(arr, low, p-1)
-		quickSort(arr, p+1, high)
-	}
 }
 
 func Sort(arr []int, algo string) []int {
